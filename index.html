@@ -70,7 +70,7 @@
                     const TruckType = document.getElementById('TruckType').value;
                     const tollCharges = document.getElementById('tollCharges').value;
 
-                    const response = await axios.post('http://13.200.75.208:4001/admin/booking/addBooking', {
+                    const response = await axios.post('https://13.200.75.208:4001/admin/booking/addBooking', {
                         pickup_location: PickupLocation,
                         drop_location: DropLocation,
                         truck_type: TruckType,
