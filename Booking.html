@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>WELCOME TO EZTRUCK</title>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="forms-container">
+            <div class="signin-signup">
+                <form action="#" class="sign-up-form" id="bookingForm">
+                    <h2 class="title">BOOK NOW</h2>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="PickupLocation" name="PickupLocation" id="PickupLocation" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="DropLocation" name="DropLocation" id="DropLocation" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-truck"></i>
+                        <select name="TruckType" id="TruckType">
+                            <option value="dalaAuto">Dala Auto</option>
+                            <option value="tataAce">Tata Ace</option>
+                            <option value="smallPickup">Small Pickup</option>
+                            <option value="largePickup">Large Pickup</option>
+                            <option value="eicher">Eicher</option>
+                        </select>
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="text" placeholder="toll Charges" name="tollCharges" id="tollCharges"
+                            value="include" />
+                    </div>
+                    <input type="submit" class="btn" value="BOOK NOW" />
+                    <p class="social-text"></p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add this div to show booking data -->
+        <div class="booking-details">
+            <h2>Booking Details</h2>
+            <ul id="bookingList">
+                <!-- Booking data will be appended here dynamically -->
+            </ul>
+        </div>
+
+
+
+        <script src="app.js"></script>
+
+        <script>
+
+            async function addBookingDetails(event) {
+                event.preventDefault(); // Prevent form submission
+
+                try {
+                    const PickupLocation = document.getElementById('PickupLocation').value;
+                    const DropLocation = document.getElementById('DropLocation').value;
+                    const TruckType = document.getElementById('TruckType').value;
+                    const tollCharges = document.getElementById('tollCharges').value;
+
+                    const response = await axios.post('http://13.200.75.208:4001/admin/booking/addBooking', {
+                        pickup_location: PickupLocation,
+                        drop_location: DropLocation,
+                        truck_type: TruckType,
+                        tollCharges: tollCharges
+                    });
+
+                    const bookingData = response.data.data;
+                    
+                    const obj = {
+                        bookingId:bookingData._id,
+                       pickup_location:bookingData.pickup_location,
+                       drop_location:bookingData.drop_location,
+                       truck_type:bookingData.truck_type,
+                       tollCharges:bookingData.tollCharges,
+                       distance:bookingData.distance,
+                       time:bookingData.duration,
+                       price:bookingData.trip_cost
+                    }
+
+                    // Display booking data
+                    displayBookingData(obj);
+
+                    alert('successfully add Booking Details');
+                } catch (error) {
+                    console.error('Error:', error);
+                    if (error.response) {
+                        console.log('Server Response Data:', error.response.data);
+                        alert(`Server responded with an error: ${error.response.status}`);
+                    } else if (error.request) {
+                        alert('No response from the server. Please try again later.');
+                    } else {
+                        alert('An unexpected error occurred.');
+                    }
+                }
+            }
+
+            function displayBookingData(bookingData) {
+                const bookingList = document.getElementById('bookingList');
+                bookingList.innerHTML = ''; // Clear previous data
+
+                // Create list items for each booking detail
+                for (const key in bookingData) {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<span>${key}:</span> <p>${bookingData[key]}</p>`;
+                    bookingList.appendChild(listItem);
+                }
+            }
+
+            document.getElementById('bookingForm').addEventListener('submit', addBookingDetails);
+
+        </script>
+
+
+</body>
+
+</html>

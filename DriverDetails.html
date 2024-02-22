@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>WELCOME TO EZTRUCK</title>
+    < </head>
+
+<body>
+
+    <div class="container">
+        <div class="forms-container">
+            <div class="signin-signup">
+                <form action="#" class="sign-in-form" id="bookingForm">
+                    <h2 class="title"></h2>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="booking Id" id="bookingId" name="bookingId" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="text" placeholder="accountNumber" name="accountNumber" id="accountNumber" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="text" placeholder="accountHolderName" name="accountHolderName"
+                            id="accountHolderName" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="text" placeholder="ifsc code" name="ifscCode" id="ifscCode" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="driver name" id="driverName" name="driverName" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="text" placeholder="driver mobile number" name="driverMobileNumber"
+                            id="driverMobileNumber" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="text" placeholder="pancard number" name="pancardNo" id="pancardNo" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="text" placeholder="aadharcard number" name="aadharcardNo" id="aadharcardNo" />
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="text" placeholder="waiting minutes" name="waitingMinutes" id="waitingMinutes" />
+                    </div>
+                    <input type="submit" value="BOOKING DETAILS" class="btn solid" />
+                </form>
+            </div>
+        </div>
+
+        <div class="booking-details">
+            <h2>Booking Details</h2>
+            <ul id="bookingList">
+                <!-- Booking data will be appended here dynamically -->
+            </ul>
+        </div>
+
+
+
+        <script src="app.js"></script>
+
+        <script>
+
+            async function addBookingDetails(event) {
+
+                event.preventDefault(); // Prevent form submission
+
+                try {
+
+                    const bookingId = document.getElementById('bookingId').value;
+                    const accountNumber = document.getElementById('accountNumber').value;
+                    const accountHolderName = document.getElementById('accountHolderName').value;
+                    const ifscCode = document.getElementById('ifscCode').value;
+                    const driverName = document.getElementById('driverName').value;
+                    const driverMobileNumber = document.getElementById('driverMobileNumber').value;
+                    const pancardNo = document.getElementById('pancardNo').value;
+                    const aadharcardNo = document.getElementById('aadharcardNo').value;
+                    const waitingMinutes = document.getElementById('waitingMinutes').value;
+
+
+                    const response = await axios.put('http://13.200.75.208:4001/admin/booking/updatedBooking', {
+                        bookingId: bookingId,
+                        accountNumber: accountNumber,
+                        accountHolderName: accountHolderName,
+                        ifscCode: ifscCode,
+                        driverName: driverName,
+                        driverMobileNumber: driverMobileNumber,
+                        pancardNo: pancardNo,
+                        aadharcardNo: aadharcardNo,
+                        waitingMinutes: waitingMinutes
+                    });
+
+                    const bookingData = response.data.data;
+
+                    const bookingDetails = {
+
+                        accountNumber: bookingData.accountDetails.accountNumber,
+                        accountHolderName: bookingData.accountDetails.accountHolderName,
+                        ifscCode: bookingData.accountDetails.ifscCode,
+                        company_share: bookingData.company_share,
+                        driver_share: bookingData.driver_share,
+                        waitingMinutes: bookingData.waitingMinutes,
+                        waitingChargesTotalPrice: bookingData.waitingChargesTotalPrice,
+                        driverName: bookingData.driverName,
+                        driverMobileNumber: bookingData.driverMobileNumber,
+                        pancardNo: bookingData.pancardNo,
+                        aadharcardNo: bookingData.aadharcardNo,
+                        pickup_location: bookingData.pickup_location,
+                        drop_location: bookingData.drop_location,
+                        truck_type: bookingData.truck_type,
+                        tollCharges: bookingData.tollCharges,
+                        distance: bookingData.distance,
+                        time: bookingData.duration,
+                        price: bookingData.price
+                    };
+
+
+                    // Display booking data
+                    displayBookingData(bookingDetails);
+                    alert('successfully return Booking Details');
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    if (error.response) {
+                        console.log('Server Response Data:', error.response.data);
+                        alert(`Server responded with an error: ${error.response.status}`);
+                    } else if (error.request) {
+                        alert('No response from the server. Please try again later.');
+                    } else {
+                        alert('An unexpected error occurred.');
+                    }
+                }
+            }
+
+            function displayBookingData(bookingData) {
+                const bookingList = document.getElementById('bookingList');
+                bookingList.innerHTML = ''; // Clear previous data
+
+                // Create list items for each booking detail
+                for (const key in bookingData) {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<span>${key}:</span> <p>${bookingData[key]}</p>`;
+                    bookingList.appendChild(listItem);
+                }
+            }
+
+            document.getElementById('bookingForm').addEventListener('submit', addBookingDetails);
+
+        </script>
+
+
+
+</body>
+
+</html>

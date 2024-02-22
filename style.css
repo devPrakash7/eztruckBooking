@@ -1,0 +1,83 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+}
+
+.forms-container {
+    width: 400px;
+}
+
+.input-field input[type="text"],
+.input-field input[type="text"],
+.input-field select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.input-field input[type="text"]:focus,
+.input-field input[type="text"]:focus,
+.input-field select:focus {
+    outline: none;
+    border-color: #64b5f6; /* Change color on focus */
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: hsl(0, 87%, 48%);
+    color: #ecdbdb;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #ff4d4d; /* Change color on hover */
+}
+
+
+
+
+.booking-details {
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.booking-details h2 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.booking-details ul {
+    list-style: none;
+    padding: 0;
+}
+
+.booking-details li {
+    margin-bottom: 10px;
+}
+
+.booking-details li span {
+    font-weight: bold;
+}
+
+.booking-details li span,
+.booking-details li p {
+    margin: 0;
+    font-size: 16px;
+}
